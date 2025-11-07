@@ -246,6 +246,11 @@ func (c *Client) initiateMultipartUpload(ctx context.Context, bucketName, object
 		}
 		urlValues.Set("versionId", opts.Internal.SourceVersionID)
 	}
+	for param, vals := range opts.Internal.CustomQueryParams {
+		for _, val := range vals {
+			urlValues.Add(param, val)
+		}
+	}
 
 	// Set ContentType header.
 	customHeader := opts.Header()

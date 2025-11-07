@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"sort"
 	"strings"
 	"time"
@@ -69,6 +70,7 @@ type AdvancedPutOptions struct {
 	TaggingTimestamp         time.Time
 	LegalholdTimestamp       time.Time
 	ReplicationValidityCheck bool
+	CustomQueryParams        url.Values
 }
 
 // PutObjectOptions represents options specified by user for PutObject call
