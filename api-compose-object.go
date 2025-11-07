@@ -286,6 +286,15 @@ func (c *Client) copyObjectDo(ctx context.Context, srcBucket, srcObject, destBuc
 		urlValues.Set("versionId", dstOpts.Internal.SourceVersionID)
 		reqMetadata.queryValues = urlValues
 	}
+	customQueryParamCount := len(dstOpts.Internal.CustomQueryParams)
+	if customQueryParamCount > 0 && reqMetadata.queryValues == nil {
+		reqMetadata.queryValues = make(url.Values, customQueryParamCount)
+	}
+	for param, vals := range dstOpts.Internal.CustomQueryParams {
+		for _, val := range vals {
+			reqMetadata.queryValues.Add(param, val)
+		}
+	}
 
 	// Set the source header
 	headers.Set("x-amz-copy-source", s3utils.EncodePath(srcBucket+"/"+srcObject))

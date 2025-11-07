@@ -765,6 +765,15 @@ func (c *Client) putObjectDo(ctx context.Context, bucketName, objectName string,
 		urlValues.Set("versionId", opts.Internal.SourceVersionID)
 		reqMetadata.queryValues = urlValues
 	}
+	customQueryParamCount := len(opts.Internal.CustomQueryParams)
+	if customQueryParamCount > 0 && reqMetadata.queryValues == nil {
+		reqMetadata.queryValues = make(url.Values, customQueryParamCount)
+	}
+	for param, vals := range opts.Internal.CustomQueryParams {
+		for _, val := range vals {
+			reqMetadata.queryValues.Add(param, val)
+		}
+	}
 
 	// Execute PUT an objectName.
 	resp, err := c.executeMethod(ctx, http.MethodPut, reqMetadata)
